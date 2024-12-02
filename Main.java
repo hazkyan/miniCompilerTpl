@@ -18,7 +18,7 @@ public class Main {
         JTextArea resultBox = new JTextArea();
         resultBox.setEditable(false);
         resultBox.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        JScrollPane resultScrollPane = new JScrollPane(resultBox);
+        JScrollPane resultScrollPane = new JScrollPane(resultBox);  
         resultScrollPane.setPreferredSize(new Dimension(600, 60));
         frame.add(resultScrollPane, BorderLayout.NORTH);
 
@@ -100,7 +100,7 @@ public class Main {
         syntaxButton.addActionListener(e -> {
             if (lexicalResultAccepted) {
                 try {
-                    String parseTree = SyntaxAnalyzer.generateParseTree(lexicalResult);
+                    String parseTree = SyntaxAnalyzer.analyze(lexicalResult);
                     resultBox.setText("Syntax analysis phase success.");
                     bigTextArea.setText(parseTree);
                     semanticButton.setEnabled(true); // Enable semantic analysis button
