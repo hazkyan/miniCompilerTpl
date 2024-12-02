@@ -1,46 +1,89 @@
 import java.util.regex.*;
 
 public class SyntaxAnalyzer {
-    public static String generateParseTree(String input) throws Exception {
-        // Define the regular expression for the variable declaration
-        String regex = "^(\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b)\\s+" + // Data type
-                       "([a-zA-Z_][a-zA-Z0-9_]*)\\s+" +                                         // Identifier
-                       "(=)\\s+" +                                                             // Assignment operator
-                       "([^;]+)\\s*" +                                                        // Value
-                       "(;)$";                                                               // Delimiter
+    // Define grammar rules as constants
+    private static final String GRAMMAR_RULES = """
+        <Program>       -> <Declaration> ;
+        <Declaration>   -> <Type> <Identifier> <Assignment> <Value>
+        <Type>          -> int | double | float | long | short | char | boolean | byte | String
+        <Identifier>    -> [a-zA-Z_][a-zA-Z0-9_]*
+        <Assignment>    -> =
+        <Value>         -> <Number> | <Char> | <Boolean> | <String> | <Expression>
+        <Number>        -> -?[0-9]+(\\.[0-9]+)?
+        <Char>          -> 'any_single_char'
+        <Boolean>       -> true | false
+        <String>        -> "any_sequence_of_chars"
+        <Expression>    -> <Value> <Operator> <Value>
+        <Operator>      -> + | - | * | /
+        """;
+
+    public static String analyze(String input) throws Exception {
+        // Include the semicolon (;) in the regex
+        String typeRegex = "\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b";
+        String identifierRegex = "[a-zA-Z_][a-zA-Z0-9_]*";
+        String assignmentRegex = "=";
+        String numberRegex = "-?\\d+(\\.\\d+)?";
+        String charRegex = "'.'";
+        String booleanRegex = "true|false";
+        String stringRegex = "\".*\"";
+        String delimiterRegex = ";";
+
+        // Updated regex for matching input with delimiter
+        String regex = "^(" + typeRegex + ")\\s+" +
+                       "(" + identifierRegex + ")" +
+                       "\\s*(" + assignmentRegex + ")\\s*" +
+                       "(" + numberRegex + "|" + charRegex + "|" + booleanRegex + "|" + stringRegex + ")" +
+                       "\\s*" + delimiterRegex + "$";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
 
-        // If the input matches the variable declaration format
         if (matcher.matches()) {
-            // Extract the lexemes
+            // Extract tokens
             String dataType = matcher.group(1);
-            String id = matcher.group(2);
-            String assignOperator = matcher.group(3);
-            String value = matcher.group(4);
-            String delimiter = matcher.group(5);
+            String identifier = matcher.group(2);
+            String assignmentOperator = matcher.group(3);
+            String valueExpression = matcher.group(4);
 
-            // Build the parse tree with a proper tree structure
+            // Generate the parse tree
             StringBuilder parseTree = new StringBuilder();
-            parseTree.append("<assign>\n");
-            parseTree.append("  ├── <data_type>\n");
-            parseTree.append("  │     └── ").append(dataType).append("\n");
-            parseTree.append("  ├── <id>\n");
-            parseTree.append("  │     └── ").append(id).append("\n");
-            parseTree.append("  ├── <assign_operator>\n");
-            parseTree.append("  │     └── ").append(assignOperator).append("\n");
-            parseTree.append("  ├── <value>\n");
-            parseTree.append("  │     └── ").append(value).append("\n");
-            parseTree.append("  └── <delimiter>\n");
-            parseTree.append("        └── ").append(delimiter).append("\n");
+            parseTree.append("Grammar Rules:\n").append(GRAMMAR_RULES).append("\n");
+            parseTree.append("\nParse Tree:\n");
+            parseTree.append("declaration\n");
+            parseTree.append("  |\n");
+            parseTree.append("  <type>        <identifier>    <assignment>   <value>      <delimiter>\n");
+            parseTree.append("    |              |               |              |               |\n");
+            parseTree.append("    ").append(dataType).append("            ").append(identifier).append("             ")
+                    .append(assignmentOperator).append("              ").append(getValueType(valueExpression)).append("          ;\n");
+            parseTree.append("                                                   |\n");
+            parseTree.append("                                                   ").append(valueExpression).append("\n");
 
-            // Return the parse tree
             return parseTree.toString();
         } else {
-            // If input does not match, throw an error
-            throw new Exception("Syntax error in the source code.");
+            throw new Exception("Syntax error: Invalid source code.");
+        }
+    }
+
+    // Determine the value type dynamically
+    private static String getValueType(String value) {
+        if (value.matches("-?\\d+(\\.\\d+)?")) { // Number
+            return "<Number>";
+        } else if (value.matches("'.'")) { // Char
+            return "<Char>";
+        } else if (value.matches("true|false")) { // Boolean
+            return "<Boolean>";
+        } else if (value.matches("\".*\"")) { // String
+            return "<String>";
+        }
+        return "<Unknown>";
+    }
+
+    public static void main(String[] args) {
+        try {
+            String input = "String name = \"uwuness\";";
+            System.out.println(SyntaxAnalyzer.analyze(input));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }
-    

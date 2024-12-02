@@ -1,25 +1,30 @@
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 public class SemanticAnalyzer {
 
     // Method to analyze the code for type correctness
     public static String analyze(String code) throws Exception {
-        // Match basic variable declaration and assignment (e.g., int x = 69;)
-        Pattern pattern = Pattern.compile("([a-zA-Z_][a-zA-Z0-9_]*)\\s*=\\s*(\\S+);"); // VariableName = value;
-        Matcher matcher = pattern.matcher(code);
-        
-        if (matcher.find()) {
-            String variableName = matcher.group(1); // Variable name
-            String value = matcher.group(2); // Value assigned to the variable
-            
-            // Determine the data type of the variable
-            String dataType = code.split("\\s+")[0]; // First word is the type (e.g., int, float)
+        // Adjust the regex to handle cases with or without spaces around '='
+        String regex = "^(\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b)\\s+" + // Data type
+                       "([a-zA-Z_][a-zA-Z0-9_]*)\\s*" +                                        // Identifier
+                       "(=)\\s*" +                                                            // Optional spaces around '='
+                       "([^;]+)\\s*" +                                                        // Value
+                       "(;)$";                                                               // Delimiter
 
-            // Type checking
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(code);
+
+        if (matcher.matches()) {
+            // Extract the data type, value, etc.
+            String dataType = matcher.group(1); // Data type (e.g., int, float)
+            String variableName = matcher.group(2); // Variable name
+            String value = matcher.group(4); // Value assigned to the variable
+
+            // Perform type checking based on the extracted data type and value
             return performTypeCheck(variableName, dataType, value);
         } else {
-            throw new Exception("Invalid code format: Expected 'dataType variableName = value;'");
+            // This should not occur if SyntaxAnalyzer passes
+            throw new Exception("Semantic error: Invalid code format.");
         }
     }
 
@@ -27,12 +32,12 @@ public class SemanticAnalyzer {
     private static String performTypeCheck(String variableName, String dataType, String value) throws Exception {
         switch (dataType) {
             case "byte":
-                if (!value.matches("-?\\d{1,3}")) {
+                if (!value.matches("-?\\d{1,3}") || !isInRange(value, Byte.MIN_VALUE, Byte.MAX_VALUE)) {
                     throw new Exception("Type mismatch: '" + value + "' is not a valid byte.");
                 }
                 break;
             case "short":
-                if (!value.matches("-?\\d{1,5}")) {
+                if (!value.matches("-?\\d{1,5}") || !isInRange(value, Short.MIN_VALUE, Short.MAX_VALUE)) {
                     throw new Exception("Type mismatch: '" + value + "' is not a valid short.");
                 }
                 break;
@@ -74,6 +79,18 @@ public class SemanticAnalyzer {
             default:
                 throw new Exception("Unknown data type: " + dataType);
         }
+
+        // If all checks pass, return success
         return "Semantic analysis passed for variable '" + variableName + "' with value '" + value + "' and type '" + dataType + "'.";
+    }
+
+    // Helper method to check if a numeric value is within the specified range
+    private static boolean isInRange(String value, long min, long max) {
+        try {
+            long numericValue = Long.parseLong(value);
+            return numericValue >= min && numericValue <= max;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
