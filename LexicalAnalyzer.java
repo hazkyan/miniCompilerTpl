@@ -1,20 +1,16 @@
+
 import java.util.*;
 import java.util.regex.*;
 
 public class LexicalAnalyzer {
-    // Define regex patterns for token types
-    private static final String KEYWORD = "\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b"; // Only
-                                                                                                            // valid
-                                                                                                            // keywords
-    private static final String IDENTIFIER = "[a-zA-Z_][a-zA-Z0-9_]*"; // Valid identifiers
-    private static final String OPERATOR = "[=+\\-*/]"; // Operators
-    private static final String DELIMITER = "[;]"; // Delimiters (e.g., semicolons)
-    private static final String LITERAL = "\\b\\d+\\b|\".*?\"|'.?'"; // Numeric, string, or char literals
-    private static final String INVALID_IDENTIFIER = "[^a-zA-Z_][a-zA-Z0-9_]*"; // Invalid identifiers like
-                                                                                // "Stringhello"
-    private static final String UNKNOWN = ".+"; // Catch-all for unidentified tokens
+    private static final String KEYWORD = "\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b";
+    private static final String IDENTIFIER = "[a-zA-Z_][a-zA-Z0-9_]*";
+    private static final String OPERATOR = "[=+\\-*/]";
+    private static final String DELIMITER = "[;]";
+    private static final String LITERAL = "\\b\\d+\\b|\".*?\"|'.?'";
+    private static final String INVALID_IDENTIFIER = "[^a-zA-Z_][a-zA-Z0-9_]*";
 
-    // Token type classification
+    // main method to
     public String analyze(String input) throws Exception {
         List<String> tokens = tokenize(input);
 
@@ -43,8 +39,8 @@ public class LexicalAnalyzer {
         return output.toString();
     }
 
+    // pang separate ng tokens
     private static List<String> tokenize(String input) {
-
         System.out.println(input);
 
         Pattern pattern = Pattern.compile(
@@ -64,6 +60,7 @@ public class LexicalAnalyzer {
         return tokens;
     }
 
+    // pang match ng token
     private static String getTokenType(String token) {
         if (token.matches(KEYWORD)) {
             return "Keyword";

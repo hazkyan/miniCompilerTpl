@@ -1,7 +1,7 @@
+
 import java.util.regex.*;
 
 public class SyntaxAnalyzer {
-    // Define grammar rules as constants
     private static final String GRAMMAR_RULES = """
             <Program>       -> <Declaration> ;
             <Declaration>   -> <Type> <Identifier> <Assignment> <Value>
@@ -57,7 +57,6 @@ public class SyntaxAnalyzer {
         }
     }
 
-    // Determine the value type dynamically
     private static String getValueType(String value) {
         if (value.matches("-?\\d+(\\.\\d+)?")) { // Number
             return "<Number>";
