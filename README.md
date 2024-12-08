@@ -44,7 +44,7 @@ The simple Java GUI contains 3 panels, the result panel at the top, the buttons 
  <br><br>
 
  ## Test Cases
-`📁 testfiles/` contains 3 test cases. <br><br>
+`📁 testfiles/` contains 4 test cases. <br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="public/check.png" alt="java" width="20"/> [1] *int var = 0;* <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Accepted**. Proper variable declaration
   
