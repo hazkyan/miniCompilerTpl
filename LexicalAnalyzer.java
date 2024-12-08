@@ -1,27 +1,82 @@
+
+import java.util.*;
 import java.util.regex.*;
 
 public class LexicalAnalyzer {
-    public static String analyze(String input) throws Exception {
-        // Adjust regex to allow optional spaces around `=`
-        String regex = "^(\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b)\\s+" + // Data type
-                       "([a-zA-Z_][a-zA-Z0-9_]*)\\s*" +                                        // Identifier
-                       "(=)\\s*" +                                                            // Optional spaces around '='
-                       "([^;]+)\\s*" +                                                        // Value
-                       "(;)$";                                                               // Delimiter
+    private static final String KEYWORD = "\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b";
+    private static final String IDENTIFIER = "[a-zA-Z_][a-zA-Z0-9_]*";
+    private static final String OPERATOR = "[=+\\-*/]";
+    private static final String DELIMITER = "[;]";
+    private static final String LITERAL = "\\b\\d+\\b|\".*?\"|'.?'";
+    private static final String INVALID_IDENTIFIER = "[^a-zA-Z_][a-zA-Z0-9_]*";
 
-        Pattern pattern = Pattern.compile(regex);
+    // main method to
+    public String analyze(String input) throws Exception {
+        List<String> tokens = tokenize(input);
+
+        StringBuilder output = new StringBuilder();
+
+        output.append(input).append("\n\n");
+
+        for (String token : tokens) {
+            if (getTokenType(token).equals("Unknown")) {
+                throw new Exception("Unknown token: '" + token + "'");
+            }
+            output.append("Token: ").append(token).append(" -> ").append(getTokenType(token)).append("\n");
+        }
+
+        String firstToken = tokens.get(0);
+        if (!firstToken.matches(KEYWORD)) {
+            throw new Exception("Invalid Keyword '" + firstToken + "'");
+        }
+
+        String secondToken = tokens.get(1);
+
+        if (!secondToken.matches(IDENTIFIER)) {
+            throw new Exception("Invalid Identifier '" + secondToken + "'");
+        }
+
+        return output.toString();
+    }
+
+    // pang separate ng tokens
+    private static List<String> tokenize(String input) {
+        System.out.println(input);
+
+        Pattern pattern = Pattern.compile(
+                "[a-zA-Z0-9_][a-zA-Z0-9_@!#$%^&*()]*" +
+                        "|\\d" +
+                        "|\"[\\s\\S]*\"" +
+                        "|[=;]");
+
         Matcher matcher = pattern.matcher(input);
 
-        if (matcher.matches()) {
-            StringBuilder output = new StringBuilder();
-            output.append("data_type: ").append(matcher.group(1)).append("\n"); // Group 1: Data type
-            output.append("id: ").append(matcher.group(2)).append("\n");        // Group 2: Variable name
-            output.append("assign_operator: ").append(matcher.group(3)).append("\n"); // Group 3: `=`
-            output.append("value: ").append(matcher.group(4)).append("\n");     // Group 4: Value
-            output.append("delimiter: ").append(matcher.group(5)).append("\n"); // Group 5: `;`
-            return output.toString();
+        List<String> tokens = new ArrayList<>();
+        while (matcher.find()) {
+            tokens.add(matcher.group());
+        }
+
+        System.out.println(tokens.toString());
+        return tokens;
+    }
+
+    // pang match ng token
+    private static String getTokenType(String token) {
+        if (token.matches(KEYWORD)) {
+            return "Keyword";
+        } else if (token.matches(IDENTIFIER)) {
+            if (token.matches(INVALID_IDENTIFIER)) {
+                return "Unknown";
+            }
+            return "Identifier";
+        } else if (token.matches(OPERATOR)) {
+            return "Operator";
+        } else if (token.matches(DELIMITER)) {
+            return "Delimiter";
+        } else if (token.matches(LITERAL)) {
+            return "Literal";
         } else {
-            throw new Exception("Lexical analysis failed. Invalid syntax.");
+            return "Unknown";
         }
     }
 }
