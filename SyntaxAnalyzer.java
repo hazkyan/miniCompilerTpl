@@ -78,12 +78,4 @@ public class SyntaxAnalyzer {
         return "<Unknown>";
     }
 
-    public static void main(String[] args) {
-        try {
-            String input = "String name = \"uwuness\";";
-            System.out.println(SyntaxAnalyzer.analyze(input));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }

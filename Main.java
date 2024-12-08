@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main {
-    private static String lexicalResult = "";  // To store the entire line from the text file
+    private static String lexicalResult = ""; // To store the entire line from the text file
     private static boolean lexicalResultAccepted = false; // Flag for successful lexical analysis
 
     public static void main(String[] args) {
@@ -18,7 +18,7 @@ public class Main {
         JTextArea resultBox = new JTextArea();
         resultBox.setEditable(false);
         resultBox.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        JScrollPane resultScrollPane = new JScrollPane(resultBox);  
+        JScrollPane resultScrollPane = new JScrollPane(resultBox);
         resultScrollPane.setPreferredSize(new Dimension(600, 60));
         frame.add(resultScrollPane, BorderLayout.NORTH);
 
@@ -85,7 +85,7 @@ public class Main {
             try {
                 LexicalAnalyzer analyzer = new LexicalAnalyzer();
                 String lexicalOutput = analyzer.analyze(lexicalResult); // Process the line into tokens
-                resultBox.setText("Lexical analysis phase success.");
+                resultBox.setText("Lexical analysis");
                 bigTextArea.setText(lexicalOutput);
                 lexicalResultAccepted = true;
                 syntaxButton.setEnabled(true); // Enable syntax analysis button
@@ -114,21 +114,21 @@ public class Main {
         });
 
         // Semantic Analysis Button Action
-semanticButton.addActionListener(e -> {
-    if (lexicalResultAccepted) {
-        try {
-            // After lexical analysis, semantic analysis should receive tokenized data
-            String semanticResult = SemanticAnalyzer.analyze(lexicalResult);
-            resultBox.setText("Semantic analysis phase success.");
-            bigTextArea.setText(semanticResult); // Display semantic analysis result
-        } catch (Exception ex) {
-            resultBox.setText("Semantic analysis failed: " + ex.getMessage());
-            bigTextArea.setText("");
-        }
-    } else {
-        resultBox.setText("Perform lexical and syntax analysis first.");
-    }
-});
+        semanticButton.addActionListener(e -> {
+            if (lexicalResultAccepted) {
+                try {
+                    // After lexical analysis, semantic analysis should receive tokenized data
+                    String semanticResult = SemanticAnalyzer.analyze(lexicalResult);
+                    resultBox.setText("Semantic analysis phase success.");
+                    bigTextArea.setText(semanticResult); // Display semantic analysis result
+                } catch (Exception ex) {
+                    resultBox.setText("Semantic analysis failed: " + ex.getMessage());
+                    bigTextArea.setText("");
+                }
+            } else {
+                resultBox.setText("Perform lexical and syntax analysis first.");
+            }
+        });
 
         // Clear Button Action
         clearButton.addActionListener(e -> {
