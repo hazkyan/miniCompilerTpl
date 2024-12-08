@@ -2,7 +2,10 @@
 
 **A simple java program that demonstrates the compiler process, lexical, syntax, and semantic. This program only accepts variable declaration in java.** <br>
 
-    Note: This project a requirement for our Final Term in the course Theory of Programming Languages, 1st Sem AY 2024-2025. - J.ALBAN & K.BANGAHON
+    Note: This project a requirement for our Final Term 
+    in the course Theory of Programming Languages,
+    1st Sem AY 2024-2025.
+    - J.ALBAN & K.BANGAHON
 
 
 <br>
