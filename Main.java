@@ -4,12 +4,12 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main {
-    private static String lexicalResult = ""; // To store the entire line from the text file
-    private static boolean lexicalResultAccepted = false; // Flag for successful lexical analysis
+    private static String lexicalResult = "";
+    private static boolean lexicalResultAccepted = false;
 
     public static void main(String[] args) {
         // Create the main frame
-        JFrame frame = new JFrame("Lexical, Syntax, and Semantic Analyzer");
+        JFrame frame = new JFrame("Mini Compiler_ALBAN_BANGAHON");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 500);
         frame.setLayout(new BorderLayout());
@@ -85,7 +85,7 @@ public class Main {
             try {
                 LexicalAnalyzer analyzer = new LexicalAnalyzer();
                 String lexicalOutput = analyzer.analyze(lexicalResult); // Process the line into tokens
-                resultBox.setText("Lexical analysis");
+                resultBox.setText("Lexical analysis phase success.");
                 bigTextArea.setText(lexicalOutput);
                 lexicalResultAccepted = true;
                 syntaxButton.setEnabled(true); // Enable syntax analysis button

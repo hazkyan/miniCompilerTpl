@@ -15,26 +15,29 @@ public class LexicalAnalyzer {
     private static final String UNKNOWN = ".+"; // Catch-all for unidentified tokens
 
     // Token type classification
-    public String analyze(String input) {
+    public String analyze(String input) throws Exception {
         List<String> tokens = tokenize(input);
 
         StringBuilder output = new StringBuilder();
+
+        output.append(input).append("\n\n");
+
         for (String token : tokens) {
             if (getTokenType(token).equals("Unknown")) {
-                return "Lexical phase failed: Unknown token '" + token + "'";
+                throw new Exception("Unknown token: '" + token + "'");
             }
             output.append("Token: ").append(token).append(" -> ").append(getTokenType(token)).append("\n");
         }
 
         String firstToken = tokens.get(0);
         if (!firstToken.matches(KEYWORD)) {
-            return "Lexical phase failed: Invalid keyword '" + firstToken + "'";
+            throw new Exception("Invalid Keyword '" + firstToken + "'");
         }
 
         String secondToken = tokens.get(1);
 
         if (!secondToken.matches(IDENTIFIER)) {
-            return "Lexical phase failed: Invalid identifier '" + secondToken + "'";
+            throw new Exception("Invalid Identifier '" + secondToken + "'");
         }
 
         return output.toString();

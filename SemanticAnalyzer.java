@@ -6,10 +6,10 @@ public class SemanticAnalyzer {
     public static String analyze(String code) throws Exception {
         // Adjust the regex to handle cases with or without spaces around '='
         String regex = "^(\\b(?:byte|short|int|long|float|double|boolean|char|String)\\b)\\s+" + // Data type
-                       "([a-zA-Z_][a-zA-Z0-9_]*)\\s*" +                                        // Identifier
-                       "(=)\\s*" +                                                            // Optional spaces around '='
-                       "([^;]+)\\s*" +                                                        // Value
-                       "(;)$";                                                               // Delimiter
+                "([a-zA-Z_][a-zA-Z0-9_]*)\\s*" + // Identifier
+                "(=)\\s*" + // Optional spaces around '='
+                "([^;]+)\\s*" + // Value
+                "(;)$"; // Delimiter
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(code);
@@ -81,10 +81,10 @@ public class SemanticAnalyzer {
         }
 
         // If all checks pass, return success
-        return "Semantic analysis passed for variable '" + variableName + "' with value '" + value + "' and type '" + dataType + "'.";
+        return "Semantic analysis passed for variable '" + variableName + "' with value '" + value + "' and type '"
+                + dataType + "'.";
     }
 
-    // Helper method to check if a numeric value is within the specified range
     private static boolean isInRange(String value, long min, long max) {
         try {
             long numericValue = Long.parseLong(value);
