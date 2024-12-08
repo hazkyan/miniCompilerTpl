@@ -14,7 +14,7 @@ public class Main {
         // frame
         JFrame frame = new JFrame("Mini Compiler_ALBAN_BANGAHON");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 500);
+        frame.setSize(1100, 600);
         frame.setLayout(new BorderLayout());
         frame.getContentPane().setBackground(Color.BLACK);
 
