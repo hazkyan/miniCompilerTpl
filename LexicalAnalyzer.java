@@ -21,7 +21,7 @@ public class LexicalAnalyzer {
             output.append("delimiter: ").append(matcher.group(5)).append("\n"); // Group 5: `;`
             return output.toString();
         } else {
-            throw new Exception("Lexical analysis failed. Invalid syntax.");
+            throw new Exception("Lexical analysis failed.");
         }
     }
 }
